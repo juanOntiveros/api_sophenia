@@ -1,7 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import OpenAI from 'openai';
 
-import { zodResponseFormat } from 'openai/helpers/zod';
+import { zodTextFormat } from 'openai/helpers/zod';
 import { PROMPTS_TO_SUGGEST_TASKS_TO_BE_CREATED } from 'src/shared/constants/prompts';
 
 import { z } from 'zod';
@@ -48,18 +48,15 @@ export class OpenAIService {
     }
 
     try {
-      const completion = await this.openai.beta.chat.completions.parse({
-        model: 'gpt-4o-mini',
-        messages: [
-          {
-            role: 'system',
-            content: SYSTEM_CONTENT,
-          },
-          { role: 'user', content: USER_CONTENT },
-        ],
-        response_format: zodResponseFormat(Tasks, 'tasks'),
+      const response = await this.openai.responses.parse({
+        model: 'gpt-5-mini',
+        instructions: SYSTEM_CONTENT,
+        input: USER_CONTENT,
+        text: {
+          format: zodTextFormat(Tasks, 'tasks'),
+        },
       });
-      const parsedData = completion.choices[0].message.parsed;
+      const parsedData = response.output_parsed;
 
       return parsedData.tasks;
     } catch (error) {
@@ -85,19 +82,16 @@ export class OpenAIService {
       tasks,
     });
 
-    const completion = await this.openai.beta.chat.completions.parse({
-      model: 'gpt-4o-mini',
-      messages: [
-        {
-          role: 'system',
-          content: systemContent,
-        },
-        { role: 'user', content: userContent },
-      ],
-      response_format: zodResponseFormat(TaskAssignations, 'taskAssignations'),
+    const response = await this.openai.responses.parse({
+      model: 'gpt-5-mini',
+      instructions: systemContent,
+      input: userContent,
+      text: {
+        format: zodTextFormat(TaskAssignations, 'taskAssignations'),
+      },
     });
 
-    const parsedData = completion.choices[0].message.parsed;
+    const parsedData = response.output_parsed;
 
     return parsedData.taskAssignations;
   }

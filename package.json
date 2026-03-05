@@ -40,7 +40,7 @@
     "mongoose": "^8.5.1",
     "multer-gridfs-storage": "^5.0.2",
     "nodemailer": "^6.9.14",
-    "openai": "^4.67.3",
+    "openai": "^6.25.0",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "reflect-metadata": "^0.1.13",
