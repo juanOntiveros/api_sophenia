@@ -48,7 +48,7 @@ export class OpenAIService {
 
     try {
       const response = await this.openai.responses.parse({
-        model: 'gpt-5-mini',
+        model: 'gpt-4o-mini',
         instructions: SYSTEM_CONTENT,
         input: USER_CONTENT,
         text: {
@@ -82,7 +82,7 @@ export class OpenAIService {
     });
 
     const response = await this.openai.responses.parse({
-      model: 'gpt-5-mini',
+      model: 'gpt-4o-mini',
       instructions: systemContent,
       input: userContent,
       text: {
