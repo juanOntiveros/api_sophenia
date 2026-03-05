@@ -33,13 +33,12 @@ export class OpenAIService {
       tasks: z.array(Task),
     });
 
-    if (!seasonMoment) {
-      seasonMoment = 'other';
-    }
-
-    // eslint-disable-next-line prefer-const
-    let { SYSTEM_CONTENT, USER_CONTENT } =
-      PROMPTS_TO_SUGGEST_TASKS_TO_BE_CREATED[seasonMoment];
+    const normalizedSeasonMoment = seasonMoment?.trim() || 'other';
+    const promptConfig =
+      PROMPTS_TO_SUGGEST_TASKS_TO_BE_CREATED[normalizedSeasonMoment] ??
+      PROMPTS_TO_SUGGEST_TASKS_TO_BE_CREATED.other;
+    const { SYSTEM_CONTENT } = promptConfig;
+    let { USER_CONTENT } = promptConfig;
 
     if (objective) {
       USER_CONTENT = `${USER_CONTENT}. Teniendo en cuenta que actualmente hay ${numberOfActiveWorkers} empleados disponibles y siguiendo el siguiente objetivo para la semana: "${objective}"`;
